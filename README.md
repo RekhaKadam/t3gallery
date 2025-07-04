@@ -6,7 +6,7 @@
 -[x]scaffold basic ui with mock data
 -[x]acctually set up a db(vercel postgres)
 -[x]attach db to ui
--[]add authentication(w/clerk)
+-[x]add authentication(w/clerk)
 -[]add image upload
 -[]error mangement(w/sentry)
 -[]Routing/img page
