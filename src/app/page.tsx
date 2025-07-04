@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { db } from "@vercel/postgres";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -13,17 +14,11 @@ export const dynamic = "force-dynamic"; // This is to ensure the page is not cac
 
 // const mockImages = mockUrls.map((url, index) => ({
 //   id: index + 1, url,}));
+async function Images(){
+    const { rows: images } = await db.query("SELECT * FROM t3gallery_image ORDER BY id DESC");
 
-
-export default async function HomePage() {
-  
-  const { rows: images } = await db.query("SELECT * FROM t3gallery_image ORDER BY id DESC");
-
-
-
-  return (
-    <main className="">
-      <div className="flex flex-wrap gap-4">
+  return(
+    <div className="flex flex-wrap gap-4">
        
         {[...images, ...images, ...images].map((image, index) => (
   <div key={`${image.id}-${index}`} className="flex w-48 flex-col">
@@ -32,6 +27,22 @@ export default async function HomePage() {
           </div>
         ))}
       </div>
+  );
+}
+
+export default async function HomePage() {
+  
+
+
+
+  return (
+    <main className="">
+      <SignedOut>
+        <div className="h-full w-full flex items-center justify-center">Please sign in</div>
+      </SignedOut>
+      <SignedIn>
+        <Images/>
+      </SignedIn>
       
     </main>
   );
