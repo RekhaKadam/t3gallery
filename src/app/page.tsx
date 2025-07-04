@@ -1,7 +1,8 @@
 import { db } from "@vercel/postgres";
+import { headers } from "next/headers";
 import Link from "next/link";
 import type { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
-
+export const dynamic = "force-dynamic"; // This is to ensure the page is not cached and always fetches fresh data
 
 
 const mockUrls=[
@@ -15,6 +16,7 @@ const mockImages = mockUrls.map((url, index) => ({
 
 
 export default async function HomePage() {
+  headers();
 const allposts = await db.query("SELECT * FROM t3gallery_image;");
   console.log(allposts);
   return (
