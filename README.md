@@ -2,13 +2,14 @@
 
 ##todo
 
--[]make it deploy
--[]scaffold basic ui with mock data
--[]acctually set up a db
--[]attach db to ui
--[]add authentication
+-[x]make it deploy(vercel)
+-[x]scaffold basic ui with mock data
+-[x]acctually set up a db(vercel postgres)
+-[x]attach db to ui
+-[]add authentication(w/clerk)
 -[]add image upload
--[]error mangement
+-[]error mangement(w/sentry)
 -[]Routing/img page
--[]delete button 
-# t3gallery
+-[]delete button (/serveractions)
+-[]analytics(posthog)
+-[]Ratelimiting(upstash)
