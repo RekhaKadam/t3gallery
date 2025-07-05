@@ -1,15 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
-import { db } from "~/server/db"; // Make sure this exports your Drizzle ORM instance
-import { AwsDataApiTransaction } from "drizzle-orm/aws-data-api/pg";
+import { db } from "@vercel/postgres";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { images } from "~/server/db/schema"; // Make sure t3gallery_image is exported from this file
-// If it's not exported, open '~/server/db/schema' and export it like this:
-// export const t3gallery_image = ...;
 
 const f = createUploadthing();
-
-
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -30,18 +24,26 @@ export const ourFileRouter = {
       const user = await auth();
 
       // If you throw, the user will not be able to upload
-      if (! (await user).userId) throw new UploadThingError("Unauthorized");
+      if (!user || !user.userId) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: (await user).userId };
+      return { userId: user.userId };
     })
     .onUploadComplete(async ({ metadata, file }) => {
+      // This code RUNS ON YOUR SERVER after upload
+      console.log("Upload complete for userId:", metadata.userId);
 
-    await db.insert(images).values({
-      name: file.name,
-      url: file.ufsUrl,
-      userId:metadata.userId as string,
-    });
+      console.log("file url", file.url);
+
+       try {
+    await db`
+      INSERT INTO t3gallery_image (name, url, "userId")
+      VALUES (${file.name}, ${file.url}, ${metadata.userId})
+    `;
+    console.log("DB insert success");
+  } catch (error) {
+    console.error("DB insert failed:", error);
+  }
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };
