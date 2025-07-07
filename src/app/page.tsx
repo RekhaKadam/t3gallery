@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 import { getMyImages } from "~/server/queries";
 export const dynamic = "force-dynamic"; // This is to ensure the page is not cached and always fetches fresh data
+import Image from 'next/image'
 
 
 // const mockUrls=[
@@ -19,11 +20,16 @@ export const dynamic = "force-dynamic"; // This is to ensure the page is not cac
 async function Images(){
 const images=await getMyImages();
   return(
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap justify-center gap-4">
        
         {images.map((image) => (
-  <div key={image.id} className="flex w-48 flex-col">
-            <img src={image.url} />
+  <div key={image.id} className="flex h-48 w-48 flex-col">
+            <Image 
+            src={image.url} 
+            style={{objectFit: "contain"}} 
+            width={192}
+            height={192}
+            alt={image.name} />
             <div>{image.name}</div>
           </div>
         ))}

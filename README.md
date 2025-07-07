@@ -8,8 +8,8 @@
 -[x]attach db to ui
 -[x]add authentication(w/clerk)
 -[x]add image upload
--[]"taint" (server-only)
--[]use next/image component
+-[x]"taint" (server-only)
+-[x]use next/image component
 -[]error mangement(w/sentry)
 -[]Routing/img page
 -[]delete button (/serveractions)
