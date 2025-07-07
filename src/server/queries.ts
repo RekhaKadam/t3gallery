@@ -16,6 +16,25 @@ export async function getMyImages() {
   
   return images;}
 
+  export async function getImageById(id: number) {
+  const user = auth();
+  if(!(await user).userId) throw new Error("Unauthorized");
+  const { rows } = await db.query(
+    'SELECT * FROM t3gallery_image WHERE id = $1 LIMIT 1',
+    [id]
+  );
+
+  const image = rows[0];
+  if (!image) throw new Error('Image not found');
+
+  if (image.userId !== (await user).userId) {
+    console.log('Unauthorized to access this image');
+  }
+
+
+  return image;
+}
+
 
 
 

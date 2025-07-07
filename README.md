@@ -10,7 +10,7 @@
 -[x]add image upload
 -[x]"taint" (server-only)
 -[x]use next/image component
--[]error mangement(w/sentry)
+-[x]error mangement(w/sentry)
 -[]Routing/img page
 -[]delete button (/serveractions)
 -[]analytics(posthog)
