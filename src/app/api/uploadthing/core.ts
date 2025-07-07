@@ -1,21 +1,25 @@
-import { auth } from "@clerk/nextjs/server";
-import { db } from "@vercel/postgres";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
+import {auth} from "@clerk/nextjs/server"; // Importing auth from Clerk
+import { db } from "~/server/db";
+import { url } from "inspector";
+import { images } from "~/server/db/schema";
 
 const f = createUploadthing();
+
+// Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  imageUploader: f({
+  imageUpload: f({
     image: {
       /**
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
       maxFileSize: "4MB",
-      maxFileCount: 40,
+      maxFileCount: 10,
     },
   })
     // Set permissions and file types for this FileRoute
@@ -24,7 +28,7 @@ export const ourFileRouter = {
       const user = await auth();
 
       // If you throw, the user will not be able to upload
-      if (!user || !user.userId) throw new UploadThingError("Unauthorized");
+      if (!user) throw new Error ("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.userId };
@@ -32,18 +36,14 @@ export const ourFileRouter = {
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userId);
+      await  db.insert(images).values({
+        name: file.name,  
+        url: file.url,
+        userId: metadata.userId,
+
+      })
 
       console.log("file url", file.url);
-
-       try {
-    await db`
-      INSERT INTO t3gallery_image (name, url, "userId")
-      VALUES (${file.name}, ${file.url}, ${metadata.userId})
-    `;
-    console.log("DB insert success");
-  } catch (error) {
-    console.error("DB insert failed:", error);
-  }
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { uploadedBy: metadata.userId };

@@ -7,7 +7,9 @@
 -[x]acctually set up a db(vercel postgres)
 -[x]attach db to ui
 -[x]add authentication(w/clerk)
--[]add image upload
+-[x]add image upload
+-[]"taint" (server-only)
+-[]use next/image component
 -[]error mangement(w/sentry)
 -[]Routing/img page
 -[]delete button (/serveractions)

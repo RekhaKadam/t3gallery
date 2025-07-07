@@ -1,8 +1,10 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { db } from "@vercel/postgres";
+import { get } from "http";
 import { headers } from "next/headers";
 import Link from "next/link";
 import type { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
+import { getMyImages } from "~/server/queries";
 export const dynamic = "force-dynamic"; // This is to ensure the page is not cached and always fetches fresh data
 
 
@@ -15,8 +17,7 @@ export const dynamic = "force-dynamic"; // This is to ensure the page is not cac
 // const mockImages = mockUrls.map((url, index) => ({
 //   id: index + 1, url,}));
 async function Images(){
-    const { rows: images } = await db.query("SELECT * FROM t3gallery_image ORDER BY id DESC");
-
+const images=await getMyImages();
   return(
     <div className="flex flex-wrap gap-4">
        

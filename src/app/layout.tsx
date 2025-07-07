@@ -10,12 +10,12 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs';
-import { Topnav } from "./_components/topnav";
+import  TopNav  from "./_components/topnav";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { extractRouterConfig } from "node_modules/uploadthing/server/index.cjs";
+import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
 
 export const metadata: Metadata = {
@@ -53,7 +53,7 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-      <body className="flex flex-col gap-4"><Topnav/>{children}</body>
+      <body className="flex flex-col gap-4"><TopNav/>{children}</body>
     </html>
     </ClerkProvider>
   );

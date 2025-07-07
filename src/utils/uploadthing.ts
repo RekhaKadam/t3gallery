@@ -3,8 +3,8 @@ import {
   generateUploadDropzone,
 } from "@uploadthing/react";
 
-import type { OurFileRouter } from "~/app/api/uploadthing/core";
+import { ourFileRouter } from "../app/api/uploadthing/core";
 
-export const UploadButton = generateUploadButton<OurFileRouter>();
-export const UploadDropzone = generateUploadDropzone<OurFileRouter>();
-export { type OurFileRouter } from "~/app/api/uploadthing/core";
+export const UploadButton = generateUploadButton<ourFileRouter>();
+export const UploadDropzone = generateUploadDropzone<ourFileRouter>();
+export { type ourFileRouter } from "src/app/api/uploadthing/core";
