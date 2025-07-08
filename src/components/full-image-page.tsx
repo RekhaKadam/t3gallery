@@ -1,5 +1,6 @@
-import { getImageById } from "~/server/queries";
+import { deleteImage, getImageById } from "~/server/queries";
 import {clerkClient} from "@clerk/nextjs/server";
+import { Button } from "./ui/button";
 
 
 export default async function FullPageImageView(props: {
@@ -19,10 +20,10 @@ export default async function FullPageImageView(props: {
   return (
   <div className="flex h-full w-screen min-w-0 items-center justify-center text-white">
       <div className="flex-shrink flex-grow">
-        <img src={image.url} className="object-contain" alt={image.name} />
+        <img src={image.url} className="p-8 object-contain" alt={image.name} />
       </div>
       <div className="flex h-full w-56 flex-shrink-0 flex-col border-l">
-        <div className="border-b p-2 text-center text-xl">{image.name}</div>
+        <div className="border-b p-5 text-center text-xl">{image.name}</div>
 
         {/* <div className="p-2">
           <div>Uploaded By:</div>
@@ -30,6 +31,16 @@ export default async function FullPageImageView(props: {
         </div> */}
 
         <div className="flex flex-col px-2"><span>Created On:</span> <span>{new Date(image.createdAt).toLocaleDateString()}</span></div>
+        </div>
+        <div className="p-10">
+            <form action={async()=> {
+                "use server";
+                // Call the server action to delete the image
+                await deleteImage(idAsNumber);
+                // Server action to delete the image
+              }}>
+              <Button type="submit" variant="destructive">Delete</Button>
+              </form>
         </div>
   </div>
   );

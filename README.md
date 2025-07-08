@@ -13,5 +13,5 @@
 -[x]error mangement(w/sentry)
 -[x]Routing/img page
 -[]delete button (/serveractions)
--[]analytics(posthog)
+-[x]analytics(posthog)
 -[]Ratelimiting(upstash)

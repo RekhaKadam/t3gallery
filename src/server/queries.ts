@@ -1,6 +1,10 @@
 import "server-only";
 import { db } from "@vercel/postgres";
 import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm/sql";
+import { images } from "./db/schema";
+import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
+import { redirect } from "next/navigation";
 
 export async function getMyImages() {
     const user=auth();
@@ -35,7 +39,26 @@ export async function getMyImages() {
   return image;
 }
 
+export async function deleteImage(id: number) {
+  const user = await auth();
 
+  if (!user?.userId) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    await db.query(
+      'DELETE FROM t3gallery_image WHERE id = $1 AND "user_id" = $2',
+      [id, user.userId]
+    );
+  } catch (error) {
+    console.error("Failed to delete image:", error);
+    throw new Error("Deletion failed");
+  }
+
+  revalidatePath("/"); // Revalidate homepage
+  redirect("/"); // Navigate to homepage
+}
 
 
   
