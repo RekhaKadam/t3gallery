@@ -1,19 +1,36 @@
 import { getImageById } from "~/server/queries";
+import {clerkClient} from "@clerk/nextjs/server";
+
 
 export default async function FullPageImageView(props: {
-  id:number;
+  id:string;
 }) {
 
   
-  const image = await getImageById(props.id);
+   const idAsNumber = Number(props.id);
+
+  if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id");
+
+  const image = await getImageById(idAsNumber);
+  const client=await clerkClient(); 
+//   const uploaderInfo = await client.users.getUser(image.userId);
+  
 
   return (
-  <div className="flex h-full w-full min-w-0 ">
-    <div className="flex-shrink flex justify-center items-center">
-    <img src={image.url} className="w-96 object-contain" />
-</div>
-    <div className="flex w-48 flex-col border-l"></div>
-    <div className="text-x1 font-bold">{image.name}</div>
+  <div className="flex h-full w-screen min-w-0 items-center justify-center text-white">
+      <div className="flex-shrink flex-grow">
+        <img src={image.url} className="object-contain" alt={image.name} />
+      </div>
+      <div className="flex h-full w-56 flex-shrink-0 flex-col border-l">
+        <div className="border-b p-2 text-center text-xl">{image.name}</div>
+
+        {/* <div className="p-2">
+          <div>Uploaded By:</div>
+          <div>{uploaderInfo.fullName}</div>
+        </div> */}
+
+        <div className="flex flex-col px-2"><span>Created On:</span> <span>{new Date(image.createdAt).toLocaleDateString()}</span></div>
+        </div>
   </div>
   );
   
