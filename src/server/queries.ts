@@ -5,6 +5,7 @@ import { and, eq } from "drizzle-orm/sql";
 import { images } from "./db/schema";
 import { revalidatePath } from "next/dist/server/web/spec-extension/revalidate";
 import { redirect } from "next/navigation";
+import analyticsServerClient from "./analytics";
 
 export async function getMyImages() {
     const user=auth();
@@ -51,6 +52,13 @@ export async function deleteImage(id: number) {
       'DELETE FROM t3gallery_image WHERE id = $1 AND "user_id" = $2',
       [id, user.userId]
     );
+    analyticsServerClient.capture({
+      distinctId: user.userId,
+      event: "delete_image",
+      properties: {
+        imageId: id,
+      }
+    })
   } catch (error) {
     console.error("Failed to delete image:", error);
     throw new Error("Deletion failed");
