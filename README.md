@@ -11,7 +11,7 @@
 -[x]"taint" (server-only)
 -[x]use next/image component
 -[x]error mangement(w/sentry)
--[]Routing/img page
+-[x]Routing/img page
 -[]delete button (/serveractions)
 -[]analytics(posthog)
 -[]Ratelimiting(upstash)

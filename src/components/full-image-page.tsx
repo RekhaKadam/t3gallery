@@ -3,7 +3,7 @@ import {clerkClient} from "@clerk/nextjs/server";
 
 
 export default async function FullPageImageView(props: {
-  id:string;
+  id:Number;
 }) {
 
   

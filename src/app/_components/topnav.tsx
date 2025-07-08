@@ -1,25 +1,19 @@
-"use client";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { UploadButton } from "~/utils/uploadthing";
-import { useRouter } from "next/navigation";
+import { SimpleUploadButton } from "./simple-upload-button";
 
-export default function TopNav() {
-  const router = useRouter();
+export function TopNav() {
+
   return (
-    <nav className=" flex items-center justify-between p-4  text-white font-semibold">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full p-4 text-xl font-semibold border-b bg-black shadow">
       <div>Gallery</div>
-      <div>
+
+      <div className="flex flex-row gap-4 items-center">
         <SignedOut>
           <SignInButton />
         </SignedOut>
         <SignedIn>
-          <UploadButton
-            endpoint="imageUpload"
-            onClientUploadComplete={() => {
-              router.refresh();
-            }}
-          />
-          <UserButton />
+          <SimpleUploadButton />
+           <UserButton />
         </SignedIn>
       </div>
     </nav>
